@@ -24,11 +24,23 @@ const findAllTransactions = async (req, res) => {
     res.json(transactions);
     logger.info(`GET /transaction`);
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: error.message || 'Erro ao buscar transações' });
-    logger.error(`GET /transaction error: ${error.message}`);
+    const msg = error.message || 'Erro ao buscar transações';
+    res.status(500).json({ error: msg });
+    logger.error(`GET /transaction error: ${msg}`);
   }
 };
 
-module.exports = { findAllTransactions };
+const createTransaction = async (req, res) => {
+  const transaction = { ...req.body };
+  try {
+    const newTransaction = await new TransactionModel(transaction).save();
+    res.status(201).json(newTransaction);
+    logger.info(`POST /transaction obj: ${transaction}`);
+  } catch (error) {
+    const msg = error.message || 'Erro ao criar transação';
+    res.status(500).json({ error: msg });
+    logger.error(`POST /transaction error: ${msg}`);
+  }
+};
+
+module.exports = { findAllTransactions, createTransaction };
