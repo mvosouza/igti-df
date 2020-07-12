@@ -30,6 +30,20 @@ const findAllTransactions = async (req, res) => {
   }
 };
 
+const findTransaction = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const transactions = await TransactionModel.findById(id).lean();
+    res.json(transactions);
+    logger.info(`GET /transaction/${id}`);
+  } catch (error) {
+    const msg = error.message || 'Erro ao buscar transação';
+    res.status(500).json({ error: msg });
+    logger.error(`GET /transaction/${id} error: ${msg}`);
+  }
+};
+
 const createTransaction = async (req, res) => {
   const transaction = { ...req.body };
   try {
@@ -43,4 +57,4 @@ const createTransaction = async (req, res) => {
   }
 };
 
-module.exports = { findAllTransactions, createTransaction };
+module.exports = { findAllTransactions, findTransaction, createTransaction };
