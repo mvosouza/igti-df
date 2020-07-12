@@ -57,4 +57,25 @@ const createTransaction = async (req, res) => {
   }
 };
 
-module.exports = { findAllTransactions, findTransaction, createTransaction };
+const updateTransaction = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const result = await TransactionModel.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    res.json(result);
+    logger.info(`PUT /transaction/${id}`);
+  } catch (error) {
+    const msg = error.message || 'Erro ao atualizar transação';
+    res.status(500).json({ error: msg });
+    logger.error(`PUT /transaction error: ${msg}`);
+  }
+};
+
+module.exports = {
+  findAllTransactions,
+  findTransaction,
+  createTransaction,
+  updateTransaction,
+};
