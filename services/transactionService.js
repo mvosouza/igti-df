@@ -34,8 +34,9 @@ const findTransaction = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const transactions = await TransactionModel.findById(id).lean();
-    res.json(transactions);
+    const transaction = await TransactionModel.findById(id).lean();
+    if (!transaction) res.status(404).json();
+    else res.json(transaction);
     logger.info(`GET /transaction/${id}`);
   } catch (error) {
     const msg = error.message || 'Erro ao buscar transação';
@@ -73,9 +74,24 @@ const updateTransaction = async (req, res) => {
   }
 };
 
+const deleteTransaction = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const transaction = await TransactionModel.findByIdAndDelete(id);
+    res.status(204).json(transaction);
+    logger.info(`DELETE /transaction/${id}`);
+  } catch (error) {
+    const msg = error.message || 'Erro ao deletar transação';
+    res.status(500).json({ error: msg });
+    logger.error(`DELETE /transaction/${id} error: ${msg}`);
+  }
+};
+
 module.exports = {
   findAllTransactions,
   findTransaction,
   createTransaction,
   updateTransaction,
+  deleteTransaction,
 };
