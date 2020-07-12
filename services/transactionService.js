@@ -8,7 +8,7 @@ const ObjectId = mongoose.Types.ObjectId;
 const TransactionModel = require('../models/TransactionModel');
 const { logger } = require('../config/logger');
 
-const findAll = async (req, res) => {
+const findAllTransactions = async (req, res) => {
   const period = req.query.period;
 
   if (!period)
@@ -31,4 +31,4 @@ const findAll = async (req, res) => {
   }
 };
 
-module.exports = { findAll };
+module.exports = { findAllTransactions };

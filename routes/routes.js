@@ -1,7 +1,7 @@
 const express = require('express');
-const { findAll } = require('../services/transactionService');
+const { findAllTransactions } = require('../services/transactionService');
 const transactionRouter = express.Router();
 
-transactionRouter.get('', findAll);
+transactionRouter.get('', findAllTransactions);
 
 module.exports = transactionRouter;
