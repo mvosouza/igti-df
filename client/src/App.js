@@ -6,12 +6,15 @@ import { getTransactions } from './api/apiServices';
 
 export default function App() {
   const [allTransactions, setAllTransactions] = useState([]);
+  const [filteredTransactions, setFilteredTransactions] = useState([]);
   const [period, setPeriod] = useState('2020-07');
+  const [filter, setFilter] = useState('');
 
   useEffect(() => {
     const fetchTransaction = async () => {
       const data = await getTransactions(period);
       setAllTransactions(data);
+      setFilteredTransactions(data);
     };
 
     fetchTransaction();
@@ -21,13 +24,25 @@ export default function App() {
     setPeriod(newPeriod);
   };
 
+  const handleFilterChange = (value) => {
+    setFilter(value);
+    const filteredSet = allTransactions.filter(({ description }) =>
+      description.toLowerCase().includes(filter.toLowerCase())
+    );
+    setFilteredTransactions(filteredSet);
+  };
+
   return (
     <div className="container">
       <h2 className="center">Desafio Final do Bootcamp Full Stack</h2>
       <h4 className="center">Controle Financeiro Pessoal</h4>
       <PeriodSelection period={period} onPeriodChange={handlePeriodChange} />
-      <Summary transactions={allTransactions} />
-      <Transactions items={allTransactions} />
+      <Summary transactions={filteredTransactions} />
+      <Transactions
+        items={filteredTransactions}
+        filter={filter}
+        onFilterCange={handleFilterChange}
+      />
     </div>
   );
 }
