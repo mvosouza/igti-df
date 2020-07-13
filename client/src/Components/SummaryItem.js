@@ -4,9 +4,7 @@ export default function SummaryItem({ text, value, valueStyle }) {
   return (
     <div className="summary-item">
       <span className="primary">{text}:</span>
-      <span style={valueStyle} className="">
-        {value}
-      </span>
+      <span style={valueStyle}>{value}</span>
     </div>
   );
 }

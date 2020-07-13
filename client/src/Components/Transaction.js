@@ -1,12 +1,12 @@
 import React from 'react';
 import { formatCurrency } from '../helper/formatter';
 
-export default function Transaction({ transaction }) {
+export default function Transaction({ transaction, cardStyle }) {
   const { day, category, description, value, type } = transaction;
   const cardColor = type === '+' ? '#A1F0DC' : '#F0A1A8';
   return (
-    <div style={{ background: cardColor }} className="card">
-      <div style={{ padding: '5px' }} className="row">
+    <div style={{ background: cardColor, ...cardStyle }} className="card">
+      <div style={{ padding: '5px', ...cardStyle }} className="row">
         <div
           style={{
             display: 'flex',
@@ -38,7 +38,9 @@ export default function Transaction({ transaction }) {
               <span style={{ fontWeight: 'bold' }}>{category}</span>
               <span style={{ fontSize: '1.1rem' }}>{description}</span>
             </div>
-            <div style={{ fontSize: '1.8rem' }}>{formatCurrency(value)}</div>
+            <div style={{ fontSize: '1.8rem', fontWeight: 500 }}>
+              {formatCurrency(value)}
+            </div>
           </div>
           <div className="col s1">
             <div

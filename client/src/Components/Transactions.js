@@ -14,9 +14,19 @@ export default function Transactions({ items }) {
         <input className="col s6 m9" type="text" placeholder="Filtro" />
       </div>
       <div style={{ fontSize: '1.2rem' }}>
-        {items.map((transaction) => (
-          <Transaction key={transaction._id} transaction={transaction} />
-        ))}
+        {items.map((transaction, index, trans) => {
+          const style =
+            index < trans.length - 1 && transaction.day === trans[index + 1].day
+              ? { marginBottom: '0px' }
+              : {};
+          return (
+            <Transaction
+              key={transaction._id}
+              transaction={transaction}
+              cardStyle={style}
+            />
+          );
+        })}
       </div>
     </div>
   );

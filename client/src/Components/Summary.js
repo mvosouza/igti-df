@@ -17,9 +17,24 @@ export default function Summary({ transactions }) {
     <div className="card">
       <div className="flex-row-summary">
         <SummaryItem text="Lançamentos" value={transactions.length} />
-        <SummaryItem text="Receitas" value={formatCurrency(revenue)} />
-        <SummaryItem text="Despesas" value={formatCurrency(expenses)} />
-        <SummaryItem text="Saldo" value={formatCurrency(balance)} />
+        <SummaryItem
+          text="Receitas"
+          value={formatCurrency(revenue)}
+          valueStyle={{ fontWeight: '500', color: '#16a085' }}
+        />
+        <SummaryItem
+          text="Despesas"
+          value={formatCurrency(expenses)}
+          valueStyle={{ fontWeight: '500', color: '#c0392b' }}
+        />
+        <SummaryItem
+          text="Saldo"
+          value={formatCurrency(balance)}
+          valueStyle={{
+            fontWeight: '500',
+            color: balance >= 0 ? '#16a085' : '#c0392b',
+          }}
+        />
       </div>
     </div>
   );
