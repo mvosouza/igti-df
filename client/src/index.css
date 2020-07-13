@@ -18,3 +18,25 @@ code {
   align-items: center;
   justify-content: center;
 }
+
+.flex-row-summary {
+  padding: 5px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.summary-item {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.summary-item > span.primary {
+  font-weight: 500;
+  color: #000;
+}
+
+.summary-item > span {
+  margin-left: 5px;
+}

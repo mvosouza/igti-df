@@ -11,7 +11,7 @@ export default function App() {
   useEffect(() => {
     const fetchTransaction = async () => {
       const data = await getTransactions(period);
-      console.log(data);
+      setAllTransactions(data);
     };
 
     fetchTransaction();
@@ -19,7 +19,6 @@ export default function App() {
 
   const handlePeriodChange = (newPeriod) => {
     setPeriod(newPeriod);
-    console.log(newPeriod);
   };
 
   return (
@@ -27,7 +26,7 @@ export default function App() {
       <h2 className="center">Desafio Final do Bootcamp Full Stack</h2>
       <h4 className="center">Controle Financeiro Pessoal</h4>
       <PeriodSelection period={period} onPeriodChange={handlePeriodChange} />
-      <Summary />
+      <Summary transactions={allTransactions} />
       <Transactions items={allTransactions} />
     </div>
   );
