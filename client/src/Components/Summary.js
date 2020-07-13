@@ -1,5 +1,6 @@
 import React from 'react';
 import SummaryItem from './SummaryItem';
+import { formatCurrency } from '../helper/formatter';
 
 export default function Summary({ transactions }) {
   const revenue = transactions.reduce((aggr, curr) => {
@@ -16,9 +17,9 @@ export default function Summary({ transactions }) {
     <div className="card">
       <div className="flex-row-summary">
         <SummaryItem text="Lançamentos" value={transactions.length} />
-        <SummaryItem text="Receitas" value={revenue} />
-        <SummaryItem text="Despesas" value={expenses} />
-        <SummaryItem text="Saldo" value={balance} />
+        <SummaryItem text="Receitas" value={formatCurrency(revenue)} />
+        <SummaryItem text="Despesas" value={formatCurrency(expenses)} />
+        <SummaryItem text="Saldo" value={formatCurrency(balance)} />
       </div>
     </div>
   );

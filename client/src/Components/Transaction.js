@@ -1,4 +1,5 @@
 import React from 'react';
+import { formatCurrency } from '../helper/formatter';
 
 export default function Transaction({ transaction }) {
   const { day, category, description, value, type } = transaction;
@@ -37,7 +38,7 @@ export default function Transaction({ transaction }) {
               <span style={{ fontWeight: 'bold' }}>{category}</span>
               <span style={{ fontSize: '1.1rem' }}>{description}</span>
             </div>
-            <div style={{ fontSize: '1.8rem' }}>{value}</div>
+            <div style={{ fontSize: '1.8rem' }}>{formatCurrency(value)}</div>
           </div>
           <div className="col s1">
             <div
