@@ -32,7 +32,8 @@ export default function Summary({ transactions }) {
           value={formatCurrency(balance)}
           valueStyle={{
             fontWeight: '500',
-            color: balance >= 0 ? '#16a085' : '#c0392b',
+            color:
+              balance > 0 ? '#16a085' : balance < 0 ? '#c0392b' : 'inherit',
           }}
         />
       </div>
