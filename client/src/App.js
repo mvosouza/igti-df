@@ -26,11 +26,14 @@ export default function App() {
 
   const handleFilterChange = (value) => {
     setFilter(value);
+  };
+
+  useEffect(() => {
     const filteredSet = allTransactions.filter(({ description }) =>
       description.toLowerCase().includes(filter.toLowerCase())
     );
     setFilteredTransactions(filteredSet);
-  };
+  }, [filter]);
 
   return (
     <div className="container">
