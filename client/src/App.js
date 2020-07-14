@@ -4,11 +4,13 @@ import PeriodSelection from './Components/PeriodSelection';
 import Transactions from './Components/Transactions';
 import { getTransactions, deleteTransaction } from './api/apiServices';
 import TransactionModal from './Components/TransactionModal';
+import { formatYearMonth } from './helper/formatter';
 
 export default function App() {
   const [allTransactions, setAllTransactions] = useState([]);
   const [filteredTransactions, setFilteredTransactions] = useState([]);
-  const [period, setPeriod] = useState('2020-07');
+  const [selectedTransaction, setSelectedTransaction] = useState();
+  const [period, setPeriod] = useState(formatYearMonth(Date.now()));
   const [filter, setFilter] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalOperation, setModalOperation] = useState('');
@@ -35,6 +37,7 @@ export default function App() {
 
   const handleAddTransaction = () => {
     setModalOperation('add');
+    setSelectedTransaction({});
     setIsModalOpen(true);
   };
 
@@ -44,7 +47,7 @@ export default function App() {
 
   const hanldeEditTransaction = (transaction) => {
     setModalOperation('edit');
-    console.log(transaction);
+    setSelectedTransaction(transaction);
     setIsModalOpen(true);
   };
 
@@ -57,6 +60,15 @@ export default function App() {
   };
 
   const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const hanldeSaveTransaction = (transaction) => {
+    if (transaction._id) {
+      console.log('edit');
+    } else {
+      console.log('add');
+    }
     setIsModalOpen(false);
   };
 
@@ -98,6 +110,8 @@ export default function App() {
           isOpen={isModalOpen}
           onModalClose={closeModal}
           operation={modalOperation}
+          transaction={selectedTransaction}
+          onSave={hanldeSaveTransaction}
         />
       )}
     </div>

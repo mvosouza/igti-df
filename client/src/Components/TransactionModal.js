@@ -1,13 +1,73 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
+import moment from 'moment';
 
 export default function TransactionModal(props) {
-  const { isOpen, onModalClose, operation } = props;
+  const { isOpen, onModalClose, operation, transaction, onSave } = props;
+  const [description, setDescription] = useState('');
+  const [value, setValue] = useState(0);
+  const [category, setCategory] = useState('');
+  const [date, setDate] = useState('');
+  const [type, setType] = useState('');
+
+  useEffect(() => {
+    setType(transaction.type || '');
+    setDescription(transaction.description || '');
+    setCategory(transaction.category || '');
+    setValue(transaction.value || 0);
+    setDate(
+      transaction.yearMonthDay || moment(Date.now()).format('YYYY-MM-DD')
+    );
+  }, [transaction]);
 
   const handleModalClose = () => onModalClose();
 
+  const handleSave = () => {
+    const aux = moment(date);
+    const newTransacton = {
+      ...transaction,
+      description,
+      value,
+      category,
+      type,
+      yearMonthDay: aux.format('YYYY-MM-DD'),
+      day: aux.date(),
+      month: aux.month() + 1,
+      year: aux.year(),
+      yearMonth: aux.format('YYYY-MM'),
+    };
+    onSave(newTransacton);
+  };
+
+  const hanldeOperationChange = (e) => {
+    setType(e.target.value);
+  };
+
+  const handleDescriptionChange = (e) => {
+    setDescription(e.target.value);
+  };
+
+  const handleCategoryChange = (e) => {
+    setCategory(e.target.value);
+  };
+
+  const handleValueChange = (e) => {
+    setValue(Number(e.target.value));
+  };
+
+  const handleDateChange = (e) => {
+    setDate(e.target.value);
+  };
+
   const title =
     operation === 'add' ? 'Inclusão de lançamento' : 'Edição de lançamento';
+  const isAllFieldsFulfilled = !(
+    type &&
+    description &&
+    category &&
+    value &&
+    date
+  );
   return (
     <Modal isOpen={isOpen} style={customStyles}>
       <div>
@@ -46,6 +106,9 @@ export default function TransactionModal(props) {
                     name="operation"
                     type="radio"
                     value="-"
+                    checked={type === '-'}
+                    disabled={operation !== 'add'}
+                    onChange={hanldeOperationChange}
                   />
                   <span
                     style={{
@@ -65,7 +128,9 @@ export default function TransactionModal(props) {
                     name="operation"
                     type="radio"
                     value="+"
-                    checked
+                    checked={type === '+'}
+                    disabled={operation !== 'add'}
+                    onChange={hanldeOperationChange}
                   />
                   <span
                     style={{
@@ -83,23 +148,40 @@ export default function TransactionModal(props) {
           <div className="row">
             <div className="input-field col s12">
               <label className="active">Descrição:</label>
-              <input value="Alvin" type="text" />
+              <input
+                type="text"
+                value={description}
+                onChange={handleDescriptionChange}
+              />
             </div>
           </div>
           <div className="row">
             <div className="input-field col s12">
               <label className="active">Categoria:</label>
-              <input value="Alvin" type="text" />
+              <input
+                type="text"
+                value={category}
+                onChange={handleCategoryChange}
+              />
             </div>
           </div>
           <div className="row">
             <div className="input-field col s6">
               <label className="active">Valor</label>
-              <input type="number" value={0} />
+              <input type="number" value={value} onChange={handleValueChange} />
             </div>
             <div className="input-field col s6">
               <label className="active">Data:</label>
-              <input type="date" />
+              <input type="date" value={date} onChange={handleDateChange} />
+            </div>
+            <div className="col 12">
+              <a
+                className="waves-effect waves-light btn"
+                onClick={handleSave}
+                disabled={isAllFieldsFulfilled}
+              >
+                <i className="material-icons left">save</i>Save
+              </a>
             </div>
           </div>
         </div>
