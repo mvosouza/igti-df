@@ -1,7 +1,15 @@
 import React from 'react';
 import Transaction from './Transaction';
 
-export default function Transactions({ items }) {
+export default function Transactions({ items, onEdit, onDelete }) {
+  const handleEdit = (transaction) => {
+    onEdit(transaction);
+  };
+
+  const handleDelete = (_id) => {
+    onDelete(_id);
+  };
+
   return (
     <div>
       <div style={{ fontSize: '1.2rem' }}>
@@ -15,6 +23,8 @@ export default function Transactions({ items }) {
               key={transaction._id}
               transaction={transaction}
               cardStyle={style}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
             />
           );
         })}

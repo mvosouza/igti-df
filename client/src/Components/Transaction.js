@@ -1,9 +1,19 @@
 import React from 'react';
 import { formatCurrency } from '../helper/formatter';
 
-export default function Transaction({ transaction, cardStyle }) {
-  const { day, category, description, value, type } = transaction;
+export default function Transaction(props) {
+  const { transaction, cardStyle, onDelete, onEdit } = props;
+  const { _id, day, category, description, value, type } = transaction;
   const cardColor = type === '+' ? '#A1F0DC' : '#F0A1A8';
+
+  const handleEdit = () => {
+    onEdit(transaction);
+  };
+
+  const handleDelete = () => {
+    onDelete(_id);
+  };
+
   return (
     <div style={{ background: cardColor, ...cardStyle }} className="card">
       <div style={{ padding: '5px', ...cardStyle }} className="row">
@@ -51,10 +61,18 @@ export default function Transaction({ transaction, cardStyle }) {
                 justifyContent: 'flex-end',
               }}
             >
-              <span style={{ cursor: 'pointer' }} className="material-icons">
+              <span
+                style={{ cursor: 'pointer' }}
+                className="material-icons"
+                onClick={handleEdit}
+              >
                 edit
               </span>
-              <span style={{ cursor: 'pointer' }} className="material-icons">
+              <span
+                style={{ cursor: 'pointer' }}
+                className="material-icons"
+                onClick={handleDelete}
+              >
                 delete
               </span>
             </div>

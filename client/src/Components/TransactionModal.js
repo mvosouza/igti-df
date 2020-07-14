@@ -7,7 +7,7 @@ export default function TransactionModal(props) {
   const handleModalClose = () => onModalClose();
 
   const title =
-    operation === '+' ? 'Inclusão de lançamento' : 'Edição de lançamento';
+    operation === 'add' ? 'Inclusão de lançamento' : 'Edição de lançamento';
   return (
     <Modal isOpen={isOpen} style={customStyles}>
       <div>
@@ -42,7 +42,7 @@ export default function TransactionModal(props) {
               <p>
                 <label>
                   <input
-                    class="with-gap"
+                    className="with-gap"
                     name="operation"
                     type="radio"
                     value="-"
@@ -61,7 +61,7 @@ export default function TransactionModal(props) {
               <p>
                 <label>
                   <input
-                    class="with-gap"
+                    className="with-gap"
                     name="operation"
                     type="radio"
                     value="+"

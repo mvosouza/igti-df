@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Summary from './Components/Summary';
 import PeriodSelection from './Components/PeriodSelection';
 import Transactions from './Components/Transactions';
-import { getTransactions } from './api/apiServices';
+import { getTransactions, deleteTransaction } from './api/apiServices';
 import TransactionModal from './Components/TransactionModal';
 
 export default function App() {
@@ -17,7 +17,6 @@ export default function App() {
     const fetchTransaction = async () => {
       const data = await getTransactions(period);
       setAllTransactions(data);
-      setFilteredTransactions(data);
     };
 
     fetchTransaction();
@@ -28,19 +27,33 @@ export default function App() {
       description.toLowerCase().includes(filter.toLowerCase())
     );
     setFilteredTransactions(filteredSet);
-  }, [filter]);
+  }, [filter, allTransactions]);
 
   const handlePeriodChange = (newPeriod) => {
     setPeriod(newPeriod);
   };
 
   const handleAddTransaction = () => {
-    setModalOperation('+');
+    setModalOperation('add');
     setIsModalOpen(true);
   };
 
   const handleFilterChange = (e) => {
     setFilter(e.target.value);
+  };
+
+  const hanldeEditTransaction = (transaction) => {
+    setModalOperation('edit');
+    console.log(transaction);
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteTransaction = async (_id) => {
+    const res = await deleteTransaction(_id);
+    const newTransactions = allTransactions.filter(
+      (transaction) => transaction._id !== _id
+    );
+    setAllTransactions(newTransactions);
   };
 
   const closeModal = () => {
@@ -60,6 +73,7 @@ export default function App() {
           style={{ marginRight: '10px' }}
           className="waves-effect waves-light btn col s6 m3"
           onClick={handleAddTransaction}
+          disabled={filter}
         >
           + NOVO LANÇAMENTO
         </button>
@@ -73,7 +87,11 @@ export default function App() {
         />
       </div>
 
-      <Transactions items={filteredTransactions} />
+      <Transactions
+        items={filteredTransactions}
+        onEdit={hanldeEditTransaction}
+        onDelete={handleDeleteTransaction}
+      />
 
       {isModalOpen && (
         <TransactionModal

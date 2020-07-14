@@ -7,4 +7,9 @@ const getTransactions = async (period) => {
   return res.data;
 };
 
-export { getTransactions };
+const deleteTransaction = async (_id) => {
+  const res = await axios.delete(`${API_URL}/${_id}`);
+  return res.data;
+};
+
+export { getTransactions, deleteTransaction };
