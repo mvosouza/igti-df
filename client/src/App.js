@@ -25,7 +25,7 @@ export default function App() {
   useEffect(() => {
     const fetchTransaction = async () => {
       const data = await getTransactions(period);
-      setAllTransactions(data);
+      setAllTransactions(data.sort((a, b) => a.day - b.day));
       setIsLoading(false);
     };
 
