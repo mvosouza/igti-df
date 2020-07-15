@@ -10,6 +10,7 @@ import {
 } from './api/apiServices';
 import TransactionModal from './Components/TransactionModal';
 import { formatYearMonth } from './helper/formatter';
+import Spinner from './Components/Spinner';
 
 export default function App() {
   const [allTransactions, setAllTransactions] = useState([]);
@@ -19,11 +20,13 @@ export default function App() {
   const [filter, setFilter] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalOperation, setModalOperation] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchTransaction = async () => {
       const data = await getTransactions(period);
       setAllTransactions(data);
+      setIsLoading(false);
     };
 
     fetchTransaction();
@@ -37,6 +40,7 @@ export default function App() {
   }, [filter, allTransactions]);
 
   const handlePeriodChange = (newPeriod) => {
+    setIsLoading(true);
     setPeriod(newPeriod);
   };
 
@@ -92,32 +96,39 @@ export default function App() {
       <h4 className="center">Controle Financeiro Pessoal</h4>
 
       <PeriodSelection period={period} onPeriodChange={handlePeriodChange} />
-      <Summary transactions={filteredTransactions} />
 
-      <div className="flex-row row">
-        <button
-          style={{ marginRight: '10px' }}
-          className="waves-effect waves-light btn col s6 m3"
-          onClick={handleAddTransaction}
-          disabled={filter}
-        >
-          + NOVO LANÇAMENTO
-        </button>
+      {isLoading && <Spinner />}
 
-        <input
-          className="col s6 m9"
-          type="text"
-          placeholder="Filtro"
-          value={filter}
-          onChange={handleFilterChange}
-        />
-      </div>
+      {!isLoading && (
+        <>
+          <Summary transactions={filteredTransactions} />
 
-      <Transactions
-        items={filteredTransactions}
-        onEdit={hanldeEditTransaction}
-        onDelete={handleDeleteTransaction}
-      />
+          <div className="flex-row row">
+            <button
+              style={{ marginRight: '10px' }}
+              className="waves-effect waves-light btn col s6 m3"
+              onClick={handleAddTransaction}
+              disabled={filter}
+            >
+              + NOVO LANÇAMENTO
+            </button>
+
+            <input
+              className="col s6 m9"
+              type="text"
+              placeholder="Filtro"
+              value={filter}
+              onChange={handleFilterChange}
+            />
+          </div>
+
+          <Transactions
+            items={filteredTransactions}
+            onEdit={hanldeEditTransaction}
+            onDelete={handleDeleteTransaction}
+          />
+        </>
+      )}
 
       {isModalOpen && (
         <TransactionModal
