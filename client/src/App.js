@@ -76,10 +76,12 @@ export default function App() {
     let newAllTransactions;
     if (transaction._id) {
       const newTransaction = await updateTransaction(transaction);
-      newAllTransactions = allTransactions.map((trans) => {
-        if (trans._id === newTransaction._id) return newTransaction;
-        else return trans;
-      });
+      newAllTransactions = allTransactions
+        .map((trans) => {
+          if (trans._id === newTransaction._id) return newTransaction;
+          else return trans;
+        })
+        .sort((a, b) => a.day - b.day);
     } else {
       const newTransaction = await addTransaction(transaction);
       newAllTransactions = [...allTransactions, newTransaction].sort(
