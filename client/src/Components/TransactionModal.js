@@ -59,8 +59,9 @@ export default function TransactionModal(props) {
     setDate(e.target.value);
   };
 
-  const title =
-    operation === 'add' ? 'Inclusão de lançamento' : 'Edição de lançamento';
+  const isEdit = operation === 'edit';
+
+  const title = isEdit ? 'Edição de lançamento' : 'Inclusão de lançamento';
   const isAllFieldsFulfilled = !(
     type &&
     description &&
@@ -68,6 +69,7 @@ export default function TransactionModal(props) {
     value &&
     date
   );
+  const disabledColor = isEdit ? styles.radio.disabled : {};
   return (
     <Modal isOpen={isOpen} style={customStyles}>
       <div>
@@ -107,14 +109,14 @@ export default function TransactionModal(props) {
                     type="radio"
                     value="-"
                     checked={type === '-'}
-                    disabled={operation !== 'add'}
+                    disabled={isEdit}
                     onChange={hanldeOperationChange}
                   />
                   <span
                     style={{
-                      fontSize: '1.3rem',
-                      fontWeight: 'bold',
-                      color: 'rgb(192, 57, 43)',
+                      ...styles.radio.base,
+                      ...styles.radio.red,
+                      ...disabledColor,
                     }}
                   >
                     Despesa
@@ -129,14 +131,14 @@ export default function TransactionModal(props) {
                     type="radio"
                     value="+"
                     checked={type === '+'}
-                    disabled={operation !== 'add'}
+                    disabled={isEdit}
                     onChange={hanldeOperationChange}
                   />
                   <span
                     style={{
-                      fontSize: '1.3rem',
-                      fontWeight: 'bold',
-                      color: 'rgb(39, 174, 96)',
+                      ...styles.radio.base,
+                      ...styles.radio.green,
+                      ...disabledColor,
                     }}
                   >
                     Receita
@@ -168,7 +170,13 @@ export default function TransactionModal(props) {
           <div className="row">
             <div className="input-field col s6">
               <label className="active">Valor</label>
-              <input type="number" value={value} onChange={handleValueChange} />
+              <input
+                type="number"
+                value={value}
+                onChange={handleValueChange}
+                min="0"
+                step="0.01"
+              />
             </div>
             <div className="input-field col s6">
               <label className="active">Data:</label>
@@ -180,7 +188,7 @@ export default function TransactionModal(props) {
                 onClick={handleSave}
                 disabled={isAllFieldsFulfilled}
               >
-                <i className="material-icons left">save</i>Save
+                <i className="material-icons left">save</i>SALVAR
               </a>
             </div>
           </div>
@@ -201,5 +209,20 @@ const customStyles = {
     bottom: 'auto',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
+  },
+};
+
+const styles = {
+  radio: {
+    base: { fontSize: '1.3rem', fontWeight: 'bold' },
+    green: {
+      color: 'rgb(39, 174, 96)',
+    },
+    red: {
+      color: 'rgb(192, 57, 43)',
+    },
+    disabled: {
+      color: '#949494',
+    },
   },
 };
