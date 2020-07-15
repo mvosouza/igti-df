@@ -2,7 +2,12 @@ import React, { useState, useEffect } from 'react';
 import Summary from './Components/Summary';
 import PeriodSelection from './Components/PeriodSelection';
 import Transactions from './Components/Transactions';
-import { getTransactions, deleteTransaction } from './api/apiServices';
+import {
+  getTransactions,
+  deleteTransaction,
+  updateTransaction,
+  addTransaction,
+} from './api/apiServices';
 import TransactionModal from './Components/TransactionModal';
 import { formatYearMonth } from './helper/formatter';
 
@@ -63,12 +68,21 @@ export default function App() {
     setIsModalOpen(false);
   };
 
-  const hanldeSaveTransaction = (transaction) => {
+  const hanldeSaveTransaction = async (transaction) => {
+    let newAllTransactions;
     if (transaction._id) {
-      console.log('edit');
+      const newTransaction = await updateTransaction(transaction);
+      newAllTransactions = allTransactions.map((trans) => {
+        if (trans._id === newTransaction._id) return newTransaction;
+        else return trans;
+      });
     } else {
-      console.log('add');
+      const newTransaction = await addTransaction(transaction);
+      newAllTransactions = [...allTransactions, newTransaction].sort(
+        (a, b) => a.day - b.day
+      );
     }
+    setAllTransactions(newAllTransactions);
     setIsModalOpen(false);
   };
 
